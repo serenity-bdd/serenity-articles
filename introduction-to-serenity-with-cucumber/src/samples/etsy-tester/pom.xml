@@ -12,8 +12,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <serenity.version>1.0.18-SNAPSHOT</serenity.version>
-        <serenity.maven.version>1.0.16</serenity.maven.version>
+        <serenity.version>1.0.19-SNAPSHOT</serenity.version>
+        <serenity.maven.version>1.0.19-SNAPSHOT</serenity.maven.version>
+        <serenity.cucumber.version>1.0.3</serenity.cucumber.version>
         <webdriver.driver>firefox</webdriver.driver>
         <tags></tags>
     </properties>
@@ -26,8 +27,8 @@
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-junit</artifactId>
-            <version>${serenity.version}</version>
+            <artifactId>serenity-cucumber</artifactId>
+            <version>${serenity.cucumber.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -74,7 +75,7 @@
                 <version>2.18</version>
                 <configuration>
                     <includes>
-                        <include>**/*Test.java</include>
+                        <include>net/serenity/samples/etsy/*.java</include>
                     </includes>
                     <systemProperties>
                         <webdriver.driver>${webdriver.driver}</webdriver.driver>
@@ -98,13 +99,6 @@
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
                 <artifactId>serenity-maven-plugin</artifactId>
                 <version>${serenity.maven.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.serenity-bdd.maven.plugins</groupId>
-                        <artifactId>serenity-maven-plugin</artifactId>
-                        <version>1.0.18-SNAPSHOT</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>serenity-reports</id>
@@ -114,6 +108,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.serenity-bdd</groupId>
+                        <artifactId>core</artifactId>
+                        <version>1.0.19-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:1.0.18-SNAPSHOT")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:1.0.19-SNAPSHOT")
     }
 }
 
@@ -26,8 +26,9 @@ dependencies {
 
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:1.7.0'
-    testCompile 'net.serenity-bdd:core:1.0.18-SNAPSHOT'
-    testCompile 'net.serenity-bdd:serenity-junit:1.0.18-SNAPSHOT'
+    testCompile 'net.serenity-bdd:core:1.0.19-SNAPSHOT'
+    testCompile 'net.serenity-bdd:serenity-junit:1.0.19-SNAPSHOT'
+    testCompile 'net.serenity-bdd:serenity-cucumber:1.0.3'
 }
 
 tasks.withType(Test) {
@@ -35,9 +36,9 @@ tasks.withType(Test) {
     systemProperty 'tags', System.getProperty('tags', '')
 }
 
-test {
-    maxParallelForks = 2
-}
+//test {
+//    maxParallelForks = 2
+//}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
