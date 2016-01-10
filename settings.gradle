@@ -1,1 +1,1 @@
-include 'introduction-to-serenity-with-junit','introduction-to-serenity-with-cucumber'
+include 'introduction-to-serenity-with-junit','introduction-to-serenity-with-cucumber','semantic-exceptions'
