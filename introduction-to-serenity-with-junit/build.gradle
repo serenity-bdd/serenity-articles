@@ -8,9 +8,13 @@ buildscript {
     }
 }
 
-apply plugin: 'org.asciidoctor.gradle.asciidoctor'
-
-version="1.0.1"
+apply plugin: 'org.asciidoctor.convert'
+version='1.0.1.2'
 
 asciidoctor {
+  sourceDir 'src/asciidoc'
+  sources {
+    include 'index.adoc'
+  }
+  separateOutputDirs false
 }

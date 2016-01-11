@@ -23,7 +23,7 @@ One simple approach that can go a long way is to use *domain-specific exceptions
 
 It turns out that this technique works equally well for automated acceptance tests, and is equally worthwhile: trouble-shooting failing acceptance tests, and routing out flaky ones, is often even more time-consuming and wasteful than debugging application bugs.
 
-In this article, we will see how domain-specific exceptions can be implemented using in *Serenity BDD* using the *Journey Pattern*. Serenity BDD is an open source library designed to help you write better, more effective automated acceptance tests, and use these acceptance tests to produce high quality test reports and living documentation. In this article we assume some knowledge of Serenity and its support for the Journey pattern. If you want to learn more about Serenity, check out the http://www.serenity-bdd.info[Serenity BDD Website].
+In this article, we will see how domain-specific exceptions can be implemented using in *Serenity BDD* using the *Journey Pattern*. Serenity BDD is an open source library designed to help you write better, more effective automated acceptance tests, and use these acceptance tests to produce high quality test reports and living documentation. In this article we assume some knowledge of Serenity and its support for the Journey pattern. If you want to learn more about Serenity, check out the http://www.serenity-bdd.info[Serenity BDD Website]. If you want to learn more about how Serenity BDD supports the Journey Pattern, take a look at the http://serenity-bdd.info/docs/serenity/#_serenity_and_the_journey_pattern[relevant chapter in the Serenity User's Manual].
 
 == Using Semantic Exceptions to make expected behavior clearer
 
