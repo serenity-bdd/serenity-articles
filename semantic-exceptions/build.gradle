@@ -14,7 +14,7 @@ version='1.0.1.2'
 asciidoctor {
   sourceDir '.'
   sources {
-    include 'index.adoc'
+    include 'semantic-exceptions.adoc'
   }
   separateOutputDirs false
 }

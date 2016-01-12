@@ -14,7 +14,7 @@ version='1.0.1.2'
 asciidoctor {
   sourceDir 'src/asciidoc'
   sources {
-    include 'index.adoc'
+    include 'introduction-to-serenity-with-junit.adoc'
   }
   separateOutputDirs false
 }
