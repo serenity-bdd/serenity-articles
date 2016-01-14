@@ -157,6 +157,16 @@ public class AddATodoItem implements Task {
 <2> What field are we entering it into
 <3> (Optional) We can also hit one or more keys afterwards
 
+=== Selecting values in drop-downs
+
+You can select an entry in a dropdown by using the `SelectFromOptions` class, which lets you select by value, visible text or index:
+
+[source,java]
+----
+theActor.attemptsTo(SelectFromOptions.byVisibleText("Red")
+                                     .from(ClientDetails.FAVORITE_COLOR));
+----
+
 == Reading values
 
 The other way to interact with a web page is to observe the state of the page. In the Journey Pattern implementation in Serenity, this is generally done in a `Question`, or as a precondition for a task or action.
