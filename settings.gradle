@@ -1,1 +1,5 @@
-include 'introduction-to-serenity-with-junit','introduction-to-serenity-with-cucumber','semantic-exceptions','ui-interactions'
+include 'introduction-to-serenity-with-junit',
+'introduction-to-serenity-with-cucumber',
+'semantic-exceptions',
+'ui-interactions',
+'soft-asserts'

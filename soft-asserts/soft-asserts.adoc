@@ -1,0 +1,77 @@
+= Soft Asserts using the Serenity BDD Journey Pattern
+John Ferguson Smart <john.smart@wakaleo.com>
+:lang: en
+:keywords: serenity-bdd, web testing, journey pattern
+:doctype: article
+:source-highlighter: coderay
+:compat-mode:
+:page-layout!:
+:sectanchors:
+:sectlinks:
+:sectnums:
+:linkattrs:
+:icons: font
+:source-highlighter: coderay
+:source-language: asciidoc
+:imagesdir: images
+
+== Introduction
+
+A general principle of automated tests is that a test should only check one thing. However, an overly-strict application of this rule can be problematic for some types of web-based acceptance and regression testing. These tests tend to be slow to run, and each additional automated web tests results in slower overall feedback. For this reason, there is value in keeping the number of automated web tests limited.
+
+Some teams attempt to work around this issue by having automated web tests that check many things as they step through an application flow. This approach has it's own problems: in particular, if one check fails, the test will stop, and no further information will be given about the other checks. In addition, if a test of this type fails, what feature is broken is not immediately obvious.
+
+In this article, we look at an approach that lets you both avoid a proliferation of small tests that slow down your test suite, and the dangers of tests with many unrelated checks.
+
+=== Tests that check more than one thing
+
+For the reasons mentioned above, it is rightly considered a bad idea to have multiple checks in a single test. However, this does not necessarily mean it is a good idea to have a separate web test to check each aspect of a single business verification. For example,  suppose we are testing that a user can view the details of a client correctly. This may involve checking a number of different fields (first name, last name, date of birth, and so on).
+
+We could check all of these fields in a single test, like this:
+
+[source,java]
+----
+then(dana).should(seeThat(Client.name(), is(equalTo("Dana"))));
+and(dana).should(seeThat(Client.color(), is(equalTo("Red"))));
+and(dana).should(seeThat(Client.dateOfBirth(), is(equalTo("10/10/1969"))));
+and(dana).should(seeThat(Client.color(), is(equalTo("Red"))));
+----
+
+When the test passes, the text report will show all of the checks:
+
+[[fig-test-report]]
+.A test with multiple checks
+image::see-client-details.png[]
+
+However, if one of these checks fails, the following ones will be skipped, giving no information about their state. This makes trouble-shooting much slower and difficult:
+
+[[fig-test-report]]
+.A failing test with multiple checks
+image::see-client-details-fail.png[]
+
+Fortunately, there is a better approach: Soft Assertions.
+
+=== Soft Assertions
+
+The idea of a Soft Assertion is an assertion that does not stop the test when it fails, allowing a test to report more than one issue. In Serenity, they are easy to implement - you simply group your assertions in the same `should()` method, like this:
+
+
+[source,java]
+----
+then(dana).should(
+        seeThat(Client.name(), is(equalTo("Dana"))),
+        seeThat(Client.color(), is(equalTo("Blue"))),
+        seeThat(Client.dateOfBirth(), is(equalTo("10/10/1969"))),
+        seeThat(Client.country(), is(equalTo("France"))));
+----
+
+If a check fails, the others within the `should()` method will still be evaluated:
+
+[[fig-test-report]]
+.Soft asserts evaluate all of the assertions, and don't stop at the first failure
+image::see-client-soft-asserts.png[]
+
+Soft Assertions not only makes the tests faster (by reducing the number of tests you need to write), but they also group related checks together, which can make it easy to understand where a problem is coming from.
+
+== Conclusion
+Soft Assertions can be very useful in many situations. However there are some caveats. Note how all of these checks are related to a single business concept (displaying client details). Soft Assertions are a bad fit when the concepts are unrelated (in this case, you really are checking several different things in the same test, which makes for bad reporting and harder trouble-shooting). They are also a bad fit if the failure of one check compromises the subsequent checks - if your check that a purchased item appears in the shopping cart fails, there is no point checking the total price. Nevertheless, there are many tests that can be made faster and more expressive by using Soft Assertions.
