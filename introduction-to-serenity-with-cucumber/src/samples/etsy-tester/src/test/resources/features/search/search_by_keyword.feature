@@ -29,12 +29,11 @@ Feature: Searching by keyword
     | material | type           |
     | silk     | Handmade       |
     | bronze   | Vintage        |
-    | wool     | Craft Supplies |
 
 # end::handmadeoutline[]
 # tag::viewdetails[]
   Scenario: Should be able to view details about a searched item
-    Given I have searched for items containing 'wool'
+    Given I have searched for items containing 'yarn'
     When I select an item
     Then I should see the corresponding item details
 # end::viewdetails[]
