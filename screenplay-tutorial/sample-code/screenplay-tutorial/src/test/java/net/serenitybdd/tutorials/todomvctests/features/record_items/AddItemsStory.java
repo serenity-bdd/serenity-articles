@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
 @RunWith(SerenityRunner.class)
 public class AddItemsStory {
@@ -36,7 +36,7 @@ public class AddItemsStory {
 
         when(justin).attemptsTo(AddATodoItem.called("Feed the cat"));
 
-        then(justin).should(seeThat(TheTodoItems.displayed(), hasItems("Feed the cat")));
+        then(justin).should(seeThat(TheTodoItems.displayed(), hasItem("Feed the cat")));
     }
 
     @Test

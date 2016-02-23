@@ -533,7 +533,7 @@ table.CodeRay td.code>pre{padding:0}
 <p>In this tutorial, you will discover just how easy it is to get productive quickly with Serenity and the Screenplay pattern. We will introduce the core concepts behind the Screenplay pattern and how it is implemented in Serenity along the way.</p>
 </div>
 <div class="paragraph">
-<p>This tutorial assumes some familiarity with Java and Java IDEs, and a passing familiarity with Maven or Gradle. You can get started either by using the Maven archetype, or by downloading the project from <strong>TODO: Add download link</strong>.</p>
+<p>This tutorial assumes some familiarity with Java and Java IDEs, and a passing familiarity with Maven or Gradle. The source code for this tutorial can be found on <a href="https://github.com/serenity-bdd/serenity-articles/tree/master/screenplay-tutorial/sample-code/screenplay-tutorial">Github</a>.</p>
 </div>
 </div>
 </div>
@@ -541,7 +541,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>2. Getting started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can create a project skeleton using the Maven Archetype Plugin. To do this, run the <code>mvn archetype:generate</code> command (with a filter to reduce the number of artifacts Maven proposes) as shown here:</p>
+<p>The easiest way to create a project skeleton for a Serenity Screenplay project is to use the Maven Archetype Plugin. To do this, run the <code>mvn archetype:generate</code> command (with a filter to reduce the number of artifacts Maven proposes) as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -628,7 +628,7 @@ $ mvn clean verify</pre>
 <h2 id="_serenity_screenplay_a_quick_tour"><a class="anchor" href="#_serenity_screenplay_a_quick_tour"></a>3. Serenity Screenplay - a quick tour</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before we write some tests, let&#8217;s take a quick look at the sample code. Import the project you just created and take a look at the <code>SearchByKeywordStory.java</code> class. This should look something like this:</p>
+<p>Before we write some tests, let&#8217;s take a quick look at the sample code. Import the project you just created into your favorite IDE (we prefer IntelliJ) and take a look at the <code>SearchByKeywordStory.java</code> class. This should look something like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -692,6 +692,14 @@ $ mvn clean verify</pre>
 <div class="title">Figure 1. The Screenplay pattern is built around Actors who use their Abilities to perform Tasks and ask Questions about the state of the system in order to achieve their business goals.</div>
 </div>
 <div class="paragraph">
+<p>When you run this test, either through Maven/Gradle or from the command line, it will produce a rendered version of the test in HTML that looks something like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/search.png" alt="search">
+</div>
+</div>
+<div class="paragraph">
 <p>Now that you&#8217;ve seen what a typical Screenplay test looks like, lets see just how easy they are to write.</p>
 </div>
 </div>
@@ -700,7 +708,7 @@ $ mvn clean verify</pre>
 <h2 id="_your_first_serenity_screenplay_test"><a class="anchor" href="#_your_first_serenity_screenplay_test"></a>4. Your first Serenity Screenplay test</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Serenity Screenplay adds a highly readable DSL to structure and express your tests in terms of business tasks. We are going to write some acceptance tests for the Dojo implementation of the TodoMVC application (see <a href="http://todomvc.com/examples/dojo/" class="bare">http://todomvc.com/examples/dojo/</a> ).</p>
+<p>Serenity Screenplay adds a highly readable DSL to structure and express your tests in terms of business tasks. To see how this DSL in action, we are going to write some acceptance tests for the Dojo implementation of the TodoMVC application (see <a href="http://todomvc.com/examples/dojo/" class="bare">http://todomvc.com/examples/dojo/</a> ).</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -709,7 +717,7 @@ $ mvn clean verify</pre>
 <div class="title">Figure 2. The TodoMVN application</div>
 </div>
 <div class="paragraph">
-<p>The first test we will write will simply check that when you add a new todo item to the list, then it appears in the list.</p>
+<p>The first test we will write will simply check that when you add a new todo item to the list, it appears in the list.</p>
 </div>
 <div class="paragraph">
 <p>Start off by creating a new package called <code>record_items</code> under the <code>features</code> package. This will represent the application <em>capability</em> to record todo items. Inside this package, create a new test class called <code>AddItemsStory</code> like the following:</p>
@@ -783,7 +791,7 @@ $ mvn clean verify</pre>
 
     when(justin).attemptsTo(AddATodoItem.called(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>));
 
-    then(justin).should(seeThat(TheTodoItems.displayed(), hasItems(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>)));
+    then(justin).should(seeThat(TheTodoItems.displayed(), hasItem(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>)));
 }</code></pre>
 </div>
 </div>
@@ -797,10 +805,7 @@ $ mvn clean verify</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">static</span> <span class="include">net.serenitybdd.screenplay.GivenWhenThen.givenThat</span>;
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">net.serenitybdd.screenplay.GivenWhenThen.seeThat</span>;
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">net.serenitybdd.screenplay.GivenWhenThen.when</span>;
-<span class="keyword">import</span> <span class="include">static</span> <span class="include">net.serenitybdd.screenplay.GivenWhenThen.then</span>;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">import</span> <span class="include">static</span> <span class="include">net.serenitybdd.screenplay.GivenWhenThen</span>.*;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -815,13 +820,23 @@ $ mvn clean verify</pre>
 <div class="sect2">
 <h3 id="_business_tasks"><a class="anchor" href="#_business_tasks"></a>4.2. Business tasks</h3>
 <div class="paragraph">
-<p>Serenity Screenplay uses layers of abstraction to make tests more readable and more maintainable. Serenity describes how a user interacts with an application in terms of three layers:
-  * <strong>Goals</strong> that represent the high level business objectives;
-  * <strong>Tasks</strong> that describe the high-level steps the user takes to achieve these goals; and
-  * <strong>Actions</strong> that describe how the user interacts with the application to perform each step.</p>
+<p>Serenity Screenplay uses layers of abstraction to make tests more readable and more maintainable. Serenity describes how a user interacts with an application in terms of three layers:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Goals</strong> that represent the high level business objectives;</p>
+</li>
+<li>
+<p><strong>Tasks</strong> that describe the high-level steps the user takes to achieve these goals; and</p>
+</li>
+<li>
+<p><strong>Actions</strong> that describe how the user interacts with the application to perform each step.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>The <strong>Goal</strong> is represented by the test or scenario name, so <code>should_be_able_to_add_an_item_to_the_todo_list()</code> for this test).</p>
+<p>The <strong>Goal</strong> is represented by the test or scenario name (<code>should_be_able_to_add_an_item_to_the_todo_list()</code> for this test).</p>
 </div>
 <div class="paragraph">
 <p><strong>Tasks</strong> are represented by classes, such as <code>StartWith</code> and <code>AddATodoItem</code> in this test. We use readable class and method names that use domain language to make the tests as readable as possible.</p>
@@ -849,7 +864,7 @@ $ mvn clean verify</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The actor methods <code>attemptsTo()</code> and <code>wasAbleTo()</code> take a list of <code>Task</code> objects and successively call the <code>performAs()</code> method on each object. We use static builder methods such as <code>StartWith.anEmptyTodoList()</code> to prepare the <code>Task</code> objects before they are executed, and pass in any variables the task may need. In this simple case, we don&#8217;t need to do anything special, so the <code>anEmptyTodoList()</code> static method just returns an instance the <code>StartWith</code> class. The only thing we do need to do is to add some Serenity instrumentation to the instance using the <code>net.serenitybdd.screenplay.Tasks.instrumented()</code> method, so that the task and underlying actions will appear in the Serenity reports:</p>
+<p>The actor methods <code>attemptsTo()</code> and <code>wasAbleTo()</code> take a list of <code>Task</code> objects and successively call the <code>performAs()</code> method for each task. We use static builder methods such as <code>StartWith.anEmptyTodoList()</code> to prepare the <code>Task</code> objects before they are executed, and pass in any variables the task may need. This helps make the code read more fluently. In this simple case, we don&#8217;t need to do anything special, so the <code>anEmptyTodoList()</code> static method just returns an instance the <code>StartWith</code> class. The only thing we do need to do is to add some Serenity instrumentation to the instance using the <code>net.serenitybdd.screenplay.Tasks.instrumented()</code> method, so that the task and underlying actions will appear in the Serenity reports:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -891,13 +906,13 @@ $ mvn clean verify</pre>
 </table>
 </div>
 <div class="paragraph">
-<p>The <code>@Step</code> annotation tells Serenity how this step should be written in the test reports. The <code>{0}</code> expression represents the Actor variable that is passed into the <code>performAs()`</code> method. We will see later how we can personalize this message further.</p>
+<p>The <code>@Step</code> annotation tells Serenity how this step should be written in the test reports. The <code>{0}</code> expression represents the Actor variable that is passed into the <code>performAs()</code> method. We will see later how we can personalize this message further.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_using_action_classes"><a class="anchor" href="#_using_action_classes"></a>4.2.2. Using Action classes</h4>
 <div class="paragraph">
-<p>We interact with the web application using the <code>Open</code> Action class. <code>Action`s classes are like `Task`s, except that they interact with the application directly and are called from within a task, not directly from the test. Serenity comes with a number of built-in UI-related interaction classes to help interact with web pages, including `Open</code>, <code>Click</code>, <code>Enter</code>, <code>Hit</code>, <code>Select</code> and <code>Scroll</code>. The <code>Open</code> class opens the actor&#8217;s browser to the URL of a particular page, as shown here:</p>
+<p>We interact with the web application using the <code>Open</code> Action class. <code>Action</code> classes are like <code>Task</code> classes, except that they interact with the application directly and are called from within a task, not directly from the test. Serenity comes with a number of built-in UI-related interaction classes to help interact with web pages, including <code>Open</code>, <code>Click</code>, <code>Enter</code>, <code>Hit</code>, <code>Select</code> and <code>Scroll</code>. The <code>Open</code> class opens the actor&#8217;s browser to the URL of a particular page, as shown here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -964,7 +979,7 @@ $ mvn clean verify</pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>We can refer to member variables like itemName in the @Step annotation</td>
+<td>We can refer to member variables like itemName in the @Step annotation using the <em>#</em> sign</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -1022,13 +1037,21 @@ $ mvn clean verify</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">then(justin).should(seeThat(TheTodoItems.displayed()), hasItems(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>));   <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">then(justin).should(seeThat(TheTodoItems.displayed()), hasItem(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>));</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <code>should()</code> method takes a list of <code>Consequences</code> that we expect to be true. You create a <code>Consequence</code> using the <code>GivenWhenThen.seeThat</code> static method, which takes two parameters:
-  - a <code>Question</code> about the state of the application, and
-  - a Hamcrest matcher</p>
+<p>The <code>should()</code> method takes a list of <code>Consequences</code> that we expect to be true. You create a <code>Consequence</code> using the <code>GivenWhenThen.seeThat</code> static method, which takes two parameters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a <code>Question</code> about the state of the application, and</p>
+</li>
+<li>
+<p>a Hamcrest matcher</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>We will see how to implement a <code>Question</code> shortly, but in a nutshell, the Question returns a value about the state of the application, and the Hamcrest matcher describes what we expect this value to be.</p>
@@ -1048,7 +1071,7 @@ $ mvn clean verify</pre>
 
     when(justin).attemptsTo(AddATodoItem.called(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>));
 
-    then(justin).should(seeThat(TheTodoItems.displayed(), hasItems(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>)));
+    then(justin).should(seeThat(TheTodoItems.displayed(), hasItem(<span class="string"><span class="delimiter">&quot;</span><span class="content">Feed the cat</span><span class="delimiter">&quot;</span></span>)));
 }</code></pre>
 </div>
 </div>
@@ -1182,7 +1205,10 @@ $ mvn clean verify</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see, this test reuses the existing tasks like <code>Start</code> and <code>AddATodoItem</code> extensively: in fact, the only change we need to make is to add the <code>aTodoListContaining()</code> method to the Start class. We could make this change by modifying the logic in the current <code>StartWith</code> class, but this would add complexity to the existing class and risk affecting tests other than the one we are currently working on. An alternative approach would be to</p>
+<p>As you can see, this test reuses the existing tasks like <code>Start</code> and <code>AddATodoItem</code> extensively: in fact, the only change we need to make is to add the <code>aTodoListContaining()</code> method to the Start class. We could make this change by modifying the logic in the current <code>StartWith</code> class, but this would add complexity to the existing class and risk affecting tests other than the one we are currently working on.</p>
+</div>
+<div class="paragraph">
+<p>An alternative approach would be to create a new task dedicated to preparing a todo list with prepopulated items. This way, our original task remains untouched, and we can focus on adding a new, less complicated task implementation.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start by duplicating the existing <code>StartWith</code> class to a class called <code>StartWithAnEmptyList</code>, and remove the static factory method from the new class:</p>
@@ -1204,7 +1230,7 @@ $ mvn clean verify</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Next, refactor the <code>StartWith</code> so that the <code>anEmptyTodoList()</code> method returns an instrumented instance of the <code>StartWithAnEmptyList</code> class:</p>
+<p>Next, we will refactor the <code>StartWith</code> to act as a Factory class, so that the <code>anEmptyTodoList()</code> method returns an instrumented instance of the <code>StartWithAnEmptyList</code> class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1235,23 +1261,11 @@ $ mvn clean verify</pre>
     }
 
     <span class="directive">public</span> <span class="directive">static</span> StartWithATodoListContaining aTodoListContaining(<span class="predefined-type">String</span>... todos) {
-        <span class="keyword">return</span> Instrumented.instanceOf(StartWithATodoListContaining.class)      <i class="conum" data-value="1"></i><b>(1)</b>
-                           .withProperties(Lists.newArrayList(todos));          <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="keyword">return</span> Instrumented.instanceOf(StartWithATodoListContaining.class)
+                           .withProperties(Lists.newArrayList(todos));
     }
 }</code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Create an instrumented instance of the StartWithATodoListContaining class</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Pass in the list of todos as a parameter to the StartWithATodoListContaining constructor</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p>Now, all we need to do is to implement the <code>StartWithATodoListContaining</code> class. A simple implementation might look like this:</p>
@@ -1314,7 +1328,7 @@ $ mvn clean verify</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-02-24 08:19:23 AEDT
+Last updated 2016-02-24 08:58:54 AEDT
 </div>
 </div>
 </body>

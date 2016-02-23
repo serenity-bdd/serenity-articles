@@ -23,10 +23,10 @@ You can find some details about the origins of the Screenplay Pattern https://id
 
 In this tutorial, you will discover just how easy it is to get productive quickly with Serenity and the Screenplay pattern. We will introduce the core concepts behind the Screenplay pattern and how it is implemented in Serenity along the way.
 
-This tutorial assumes some familiarity with Java and Java IDEs, and a passing familiarity with Maven or Gradle. You can get started either by using the Maven archetype, or by downloading the project from *TODO: Add download link*.
+This tutorial assumes some familiarity with Java and Java IDEs, and a passing familiarity with Maven or Gradle. The source code for this tutorial can be found on https://github.com/serenity-bdd/serenity-articles/tree/master/screenplay-tutorial/sample-code/screenplay-tutorial[Github].
 
 == Getting started
-You can create a project skeleton using the Maven Archetype Plugin. To do this, run the `mvn archetype:generate` command (with a filter to reduce the number of artifacts Maven proposes) as shown here:
+The easiest way to create a project skeleton for a Serenity Screenplay project is to use the Maven Archetype Plugin. To do this, run the `mvn archetype:generate` command (with a filter to reduce the number of artifacts Maven proposes) as shown here:
 
 ----
 $ mvn archetype:generate -Dfilter=screenplay
@@ -98,7 +98,7 @@ Both will run a simple test performing a search on Google and generate some repo
 
 == Serenity Screenplay - a quick tour
 
-Before we write some tests, let's take a quick look at the sample code. Import the project you just created and take a look at the `SearchByKeywordStory.java` class. This should look something like this:
+Before we write some tests, let's take a quick look at the sample code. Import the project you just created into your favorite IDE (we prefer IntelliJ) and take a look at the `SearchByKeywordStory.java` class. This should look something like this:
 
 [source, java]
 ----
@@ -142,17 +142,20 @@ Let's go through this test to get an idea of how a typical Serenity Screenplay t
 .The Screenplay pattern is built around Actors who use their Abilities to perform Tasks and ask Questions about the state of the system in order to achieve their business goals.
 image::screenplay.png[]
 
+When you run this test, either through Maven/Gradle or from the command line, it will produce a rendered version of the test in HTML that looks something like this:
+
+image::search.png[]
 
 Now that you've seen what a typical Screenplay test looks like, lets see just how easy they are to write.
 
 == Your first Serenity Screenplay test
 
-Serenity Screenplay adds a highly readable DSL to structure and express your tests in terms of business tasks. We are going to write some acceptance tests for the Dojo implementation of the TodoMVC application (see http://todomvc.com/examples/dojo/ ).
+Serenity Screenplay adds a highly readable DSL to structure and express your tests in terms of business tasks. To see how this DSL in action, we are going to write some acceptance tests for the Dojo implementation of the TodoMVC application (see http://todomvc.com/examples/dojo/ ).
 
 .The TodoMVN application
 image::todomvc.png[]
 
-The first test we will write will simply check that when you add a new todo item to the list, then it appears in the list.
+The first test we will write will simply check that when you add a new todo item to the list, it appears in the list.
 
 Start off by creating a new package called `record_items` under the `features` package. This will represent the application _capability_ to record todo items. Inside this package, create a new test class called `AddItemsStory` like the following:
 
@@ -199,7 +202,7 @@ public void should_be_able_to_add_an_item_to_the_todo_list() {
 
     when(justin).attemptsTo(AddATodoItem.called("Feed the cat"));
 
-    then(justin).should(seeThat(TheTodoItems.displayed(), hasItems("Feed the cat")));
+    then(justin).should(seeThat(TheTodoItems.displayed(), hasItem("Feed the cat")));
 }
 ----
 
@@ -211,10 +214,7 @@ The code shown here uses words like "given", "when" and "then" to make the inten
 
 [source, java]
 ----
-import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
-import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
-import static net.serenitybdd.screenplay.GivenWhenThen.when;
-import static net.serenitybdd.screenplay.GivenWhenThen.then;
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
 ----
 
 These methods are actually optional, and in some cases it makes sense to omit them entirely. For example, you can also write the second line shown above like this:
@@ -227,11 +227,12 @@ justin.attemptsTo(AddATodoItem.called("Feed the cat"));
 === Business tasks
 
 Serenity Screenplay uses layers of abstraction to make tests more readable and more maintainable. Serenity describes how a user interacts with an application in terms of three layers:
-  * *Goals* that represent the high level business objectives;
-  * *Tasks* that describe the high-level steps the user takes to achieve these goals; and
-  * *Actions* that describe how the user interacts with the application to perform each step.
 
-The *Goal* is represented by the test or scenario name, so `should_be_able_to_add_an_item_to_the_todo_list()` for this test).
+ - *Goals* that represent the high level business objectives;
+ - *Tasks* that describe the high-level steps the user takes to achieve these goals; and
+ - *Actions* that describe how the user interacts with the application to perform each step.
+
+The *Goal* is represented by the test or scenario name (`should_be_able_to_add_an_item_to_the_todo_list()` for this test).
 
 *Tasks* are represented by classes, such as `StartWith` and `AddATodoItem` in this test. We use readable class and method names that use domain language to make the tests as readable as possible.
 
@@ -255,7 +256,7 @@ public class StartWith implements Task {
 }
 ----
 
-The actor methods `attemptsTo()` and `wasAbleTo()` take a list of `Task` objects and successively call the `performAs()` method on each object. We use static builder methods such as `StartWith.anEmptyTodoList()` to prepare the `Task` objects before they are executed, and pass in any variables the task may need. In this simple case, we don't need to do anything special, so the `anEmptyTodoList()` static method just returns an instance the `StartWith` class. The only thing we do need to do is to add some Serenity instrumentation to the instance using the `net.serenitybdd.screenplay.Tasks.instrumented()` method, so that the task and underlying actions will appear in the Serenity reports:
+The actor methods `attemptsTo()` and `wasAbleTo()` take a list of `Task` objects and successively call the `performAs()` method for each task. We use static builder methods such as `StartWith.anEmptyTodoList()` to prepare the `Task` objects before they are executed, and pass in any variables the task may need. This helps make the code read more fluently. In this simple case, we don't need to do anything special, so the `anEmptyTodoList()` static method just returns an instance the `StartWith` class. The only thing we do need to do is to add some Serenity instrumentation to the instance using the `net.serenitybdd.screenplay.Tasks.instrumented()` method, so that the task and underlying actions will appear in the Serenity reports:
 
 [source, java]
 ----
@@ -282,11 +283,11 @@ Now let's come back to the `performAs()` method. An actor performs a task by eit
 <2> What should this step look like in the test reports ({0} will be replaced with the name of the actor)
 <3> The actor performs this task simply by opening the web browser on the TodoMVC application homepage.
 
-The `@Step` annotation tells Serenity how this step should be written in the test reports. The `{0}` expression represents the Actor variable that is passed into the `performAs()`` method. We will see later how we can personalize this message further.
+The `@Step` annotation tells Serenity how this step should be written in the test reports. The `{0}` expression represents the Actor variable that is passed into the `performAs()` method. We will see later how we can personalize this message further.
 
 ==== Using Action classes
 
-We interact with the web application using the `Open` Action class. `Action`s classes are like `Task`s, except that they interact with the application directly and are called from within a task, not directly from the test. Serenity comes with a number of built-in UI-related interaction classes to help interact with web pages, including `Open`, `Click`, `Enter`, `Hit`, `Select` and `Scroll`. The `Open` class opens the actor's browser to the URL of a particular page, as shown here:
+We interact with the web application using the `Open` Action class. `Action` classes are like `Task` classes, except that they interact with the application directly and are called from within a task, not directly from the test. Serenity comes with a number of built-in UI-related interaction classes to help interact with web pages, including `Open`, `Click`, `Enter`, `Hit`, `Select` and `Scroll`. The `Open` class opens the actor's browser to the URL of a particular page, as shown here:
 
 [source,java]
 ----
@@ -341,7 +342,7 @@ public class AddATodoItem implements Task {
 }
 ----
 <1> The itemName field stores the name of the todo item we want to add
-<2> We can refer to member variables like itemName in the @Step annotation
+<2> We can refer to member variables like itemName in the @Step annotation using the '#' sign
 <3> We initialize the member variable in the constructor
 <4> Create an instrumented instance of the AddATodoItem and pass the itemName argument to the AddATodoItem constructor
 
@@ -383,12 +384,13 @@ In Serenity, we use the `Actor`'s `should()` method to write something very simi
 
 [source,java]
 ----
-then(justin).should(seeThat(TheTodoItems.displayed()), hasItems("Feed the cat"));   <1>
+then(justin).should(seeThat(TheTodoItems.displayed()), hasItem("Feed the cat"));
 ----
 
 The `should()` method takes a list of `Consequences` that we expect to be true. You create a `Consequence` using the `GivenWhenThen.seeThat` static method, which takes two parameters:
-  - a `Question` about the state of the application, and
-  - a Hamcrest matcher
+
+ - a `Question` about the state of the application, and
+ - a Hamcrest matcher
 
 We will see how to implement a `Question` shortly, but in a nutshell, the Question returns a value about the state of the application, and the Hamcrest matcher describes what we expect this value to be.
 
@@ -406,7 +408,7 @@ public void should_be_able_to_add_an_item_to_the_todo_list() {
 
     when(justin).attemptsTo(AddATodoItem.called("Feed the cat"));
 
-    then(justin).should(seeThat(TheTodoItems.displayed(), hasItems("Feed the cat")));
+    then(justin).should(seeThat(TheTodoItems.displayed(), hasItem("Feed the cat")));
 }
 ----
 
@@ -497,7 +499,9 @@ public void should_be_able_to_add_additional_todo_items() {
 }
 ----
 
-As you can see, this test reuses the existing tasks like `Start` and `AddATodoItem` extensively: in fact, the only change we need to make is to add the `aTodoListContaining()` method to the Start class. We could make this change by modifying the logic in the current `StartWith` class, but this would add complexity to the existing class and risk affecting tests other than the one we are currently working on. An alternative approach would be to
+As you can see, this test reuses the existing tasks like `Start` and `AddATodoItem` extensively: in fact, the only change we need to make is to add the `aTodoListContaining()` method to the Start class. We could make this change by modifying the logic in the current `StartWith` class, but this would add complexity to the existing class and risk affecting tests other than the one we are currently working on.
+
+An alternative approach would be to create a new task dedicated to preparing a todo list with prepopulated items. This way, our original task remains untouched, and we can focus on adding a new, less complicated task implementation.
 
 Let's start by duplicating the existing `StartWith` class to a class called `StartWithAnEmptyList`, and remove the static factory method from the new class:
 
@@ -517,7 +521,7 @@ public class StartWithAnEmptyList implements Task {
 }
 ----
 
-Next, refactor the `StartWith` so that the `anEmptyTodoList()` method returns an instrumented instance of the `StartWithAnEmptyList` class:
+Next, we will refactor the `StartWith` to act as a Factory class, so that the `anEmptyTodoList()` method returns an instrumented instance of the `StartWithAnEmptyList` class:
 
 [source,java]
 ----
@@ -546,13 +550,11 @@ public class StartWith {
     }
 
     public static StartWithATodoListContaining aTodoListContaining(String... todos) {
-        return Instrumented.instanceOf(StartWithATodoListContaining.class)      <1>
-                           .withProperties(Lists.newArrayList(todos));          <2>
+        return Instrumented.instanceOf(StartWithATodoListContaining.class)
+                           .withProperties(Lists.newArrayList(todos));
     }
 }
 ----
-<1> Create an instrumented instance of the StartWithATodoListContaining class
-<2> Pass in the list of todos as a parameter to the StartWithATodoListContaining constructor
 
 Now, all we need to do is to implement the `StartWithATodoListContaining` class. A simple implementation might look like this:
 
